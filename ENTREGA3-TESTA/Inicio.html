@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoalMakers Agency</title>
+    <link rel="stylesheet" href="Inicio.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="banner">
+        <h1>Bienvenido a GoalMakers Agency</h1>
+        <p>Agencia de Representantes de Fútbol</p>
+    </div>
+    <form id="registro-form" style="display: block;">
+        <h2>Registrarse</h2>
+        <input type="text" id="nombre" placeholder="Nombre completo" required>
+        <input type="email" id="email" placeholder="Correo electrónico" required>
+        <input type="password" id="password" placeholder="Contraseña" required>
+        <button type="submit">Registrarse</button>
+        <p>¿Ya tienes una cuenta? <a href="#" onclick="mostrarInicioSesion()">Iniciar sesión</a></p>
+    </form>
+
+    <form id="inicio-sesion-form" style="display: none;">
+        <h2>Iniciar Sesión</h2>
+        <input type="email" id="email-login" placeholder="Correo electrónico" required>
+        <input type="password" id="password-login" placeholder="Contraseña" required>
+        <button type="submit">Iniciar Sesión</button>
+        <p>¿Aún no tienes una cuenta? <a href="#" onclick="mostrarRegistro()">Registrarse</a></p>
+    </form>
+    <script src="Inicio.js"></script>
+</body>
+</html>

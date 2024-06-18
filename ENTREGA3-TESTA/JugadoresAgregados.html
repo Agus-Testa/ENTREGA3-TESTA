@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugadores Agregados</title>
+    <link rel="stylesheet" href="JugadoresAgregados.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>Jugadores Agregados</h1>
+            <a href="GoalMakers Agency.html" class="back-link">Volver a la página anterior</a>
+        </div>
+    </header>
+    <section class="container" id="jugadores-container">
+    </section>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    mostrarJugadoresAgregados();
+});
+
+function mostrarJugadoresAgregados() {
+    const jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+    const container = document.getElementById('jugadores-container');
+    container.innerHTML = '';
+    jugadores.forEach((jugador, index) => {
+        const jugadorDiv = document.createElement('div');
+        jugadorDiv.classList.add('jugador-card');
+        jugadorDiv.innerHTML = `
+            <h2>${jugador.nombre} ${jugador.apellido}</h2>
+            <img src="${jugador.imagen}" alt="Imagen de ${jugador.nombre} ${jugador.apellido}">
+            <p><strong>Edad:</strong> ${jugador.edad}</p>
+            <p><strong>DNI:</strong> ${jugador.dni}</p>
+            <p><strong>País de nacimiento:</strong> ${jugador.pais}</p>
+            <p><strong>Fecha de nacimiento:</strong> ${jugador.fechaNacimiento}</p>
+            <p><strong>Goles:</strong> ${jugador.goles}</p>
+            <button onclick="eliminarJugador(${index})">Eliminar</button>
+            <button onclick="editarJugador(${index})">Editar</button>
+        `;
+        container.appendChild(jugadorDiv);
+    });
+}
+
+function eliminarJugador(index) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'No podrás revertir esto!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#007bff',
+        cancelButtonColor: '#dc3545',
+        confirmButtonText: 'Sí, eliminarlo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+            jugadores.splice(index, 1);
+            localStorage.setItem('jugadores', JSON.stringify(jugadores));
+            mostrarJugadoresAgregados();
+            Swal.fire(
+                'Eliminado!',
+                'El jugador ha sido eliminado.',
+                'success'
+            );
+        }
+    });
+}
+
+function editarJugador(index) {
+    let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+    const jugadorEditar = jugadores[index];
+    if (jugadorEditar) {
+        Swal.mixin({
+            input: 'text',
+            confirmButtonText: 'Siguiente &rarr;',
+            showCancelButton: true,
+            progressSteps: ['1', '2', '3', '4', '5']
+        }).queue([
+            {
+                title: 'Editar Nombre',
+                text: 'Ingrese el nuevo nombre:',
+                inputValue: jugadorEditar.nombre,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Debe ingresar un nombre válido';
+                    }
+                }
+            },
+            {
+                title: 'Editar Apellido',
+                text: 'Ingrese el nuevo apellido:',
+                inputValue: jugadorEditar.apellido,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Debe ingresar un apellido válido';
+                    }
+                }
+            },
+            {
+                title: 'Editar DNI',
+                text: 'Ingrese el nuevo DNI:',
+                inputValue: jugadorEditar.dni,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Debe ingresar un DNI válido';
+                    }
+                }
+            },
+            {
+                title: 'Editar País de Nacimiento',
+                text: 'Ingrese el nuevo país de nacimiento:',
+                inputValue: jugadorEditar.pais,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Debe ingresar un país válido';
+                    }
+                }
+            },
+            {
+                title: 'Editar Goles',
+                text: 'Ingrese la Nueva Cantidad de Goles:',
+                inputValue: jugadorEditar.goles,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Debe Ingresar los Goles'
+                    }
+                }
+            }
+        ]).then((result) => {
+            if (result.value) {
+                const nuevoNombre = result.value[0];
+                const nuevoApellido = result.value[1];
+                const nuevoDni = result.value[2];
+                const nuevoPais = result.value[3];
+                const nuevoGoles = result.value[4];
+                
+                jugadorEditar.nombre = nuevoNombre;
+                jugadorEditar.apellido = nuevoApellido;
+                jugadorEditar.dni = nuevoDni;
+                jugadorEditar.pais = nuevoPais;
+                jugadorEditar.goles = nuevoGoles;
+                
+                localStorage.setItem('jugadores', JSON.stringify(jugadores));
+                Swal.fire(
+                    '¡Datos Actualizados!',
+                    'El jugador ha sido actualizado correctamente.',
+                    'success'
+                );
+                mostrarJugadoresAgregados();
+            }
+        });
+    } else {
+        Swal.fire(
+            'Error',
+            'No se encontró ningún jugador con ese índice.',
+            'error'
+        );
+    }
+}
+    </script>
+    <footer>
+        <p>© 2024 GoalMakers Agency. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
+
